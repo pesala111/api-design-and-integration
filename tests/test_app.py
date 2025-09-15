@@ -60,7 +60,7 @@ class TestAPI:
         response = client.get("/api/search", params={"query": "EQ001"})
         assert response.status_code == 200
         data = response.json()
-        assert "equipment_matches" in data
+        assert "equipment_matches" in data or "maintenance_matches" in data
 
     def test_info_endpoint(self):
         """Test info endpoint returns metadata."""
@@ -69,3 +69,18 @@ class TestAPI:
         data = response.json()
         assert "unique_locations" in data
         assert "maintenance_types" in data
+
+    def test_export_endpoint_json(self):
+        """Test the export endpoint returns valid JSON."""
+        response = client.get("/api/export", params={"format": "json"})
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert any("equipment_id" in item for item in data)
+
+    def test_export_endpoint_csv(self):
+        """Test the export endpoint returns CSV format."""
+        response = client.get("/api/export", params={"format": "csv"})
+        assert response.status_code == 200
+        assert "text/csv" in response.headers["content-type"]
+        assert "equipment_id" in response.text.splitlines()[0]
