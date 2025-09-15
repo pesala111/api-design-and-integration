@@ -1,13 +1,14 @@
 """
-FastAPI application entry point.
+main.py
 
-This module contains the main FastAPI application instance with basic configuration.
+Entry point for running the FastAPI application. Configures metadata and
+includes routers for API endpoints.
 """
+
 
 from fastapi import FastAPI
 from src.api import router
 
-# Create FastAPI instance with metadata
 app = FastAPI(
     title="Utility Knowledge API",
     description="API for equipment and maintenance data",
@@ -16,7 +17,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Include your endpoints
+# Endpoints
 app.include_router(router)
 
 if __name__ == "__main__":

@@ -1,3 +1,11 @@
+"""
+api.py
+
+Contains FastAPI route definitions for exposing equipment and maintenance data
+via REST API endpoints (list, search, metadata).
+"""
+
+
 from fastapi import APIRouter, HTTPException, Query
 from typing import List
 
@@ -10,7 +18,7 @@ from src.data_processor import (
 )
 from src.models import Equipment, MaintenanceLog
 
-# Create a router for API endpoints
+# Router for API endpoints
 router = APIRouter(prefix="/api", tags=["Utility Knowledge API"])
 
 # Endpoints

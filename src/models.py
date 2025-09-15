@@ -1,3 +1,11 @@
+"""
+models.py
+
+Defines the Pydantic data models (schemas) used for validation and serialization
+of equipment and maintenance log data in the Utility Knowledge API.
+"""
+
+
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import date

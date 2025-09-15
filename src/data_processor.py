@@ -1,3 +1,11 @@
+"""
+data_processor.py
+
+Handles loading, cleaning, and transforming CSV and JSON data into validated
+Pydantic models. Also provides helper functions for extracting unique entities.
+"""
+
+
 import pandas as pd
 import json
 from pathlib import Path
@@ -71,7 +79,6 @@ EQUIPMENT_DATA = load_equipment(EQUIPMENT_FILE)
 MAINTENANCE_DATA = load_maintenance(MAINTENANCE_FILE)
 
 # Extraction Functions
-
 def extract_equipment_entities():
     """
     Return a sorted list of tuples (equipment_id, equipment_type).
