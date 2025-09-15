@@ -1,0 +1,28 @@
+# Python
+/venv
+__pycache__/
+*.pyc
+
+# Testing
+.pytest_cache/
+
+# Environment
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Specific Project Files to Ignore
+Dockerfile
+ci.yml
+README.md
+SETUP_INSTRUCTIONS.md
