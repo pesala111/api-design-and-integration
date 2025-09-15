@@ -2,12 +2,14 @@
 api.py
 
 Contains FastAPI route definitions for exposing equipment and maintenance data
-via REST API endpoints (list, search, metadata).
+via REST API endpoints (list, search, metadata, and export).
 """
 
 
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import JSONResponse, StreamingResponse
 from typing import List
+from datetime import date
 
 from src.data_processor import (
     EQUIPMENT_DATA,
@@ -24,7 +26,9 @@ router = APIRouter(prefix="/api", tags=["Utility Knowledge API"])
 # Endpoints
 @router.get("/equipment", response_model=List[Equipment])
 def get_all_equipment():
-    """Return all equipment entries."""
+    """
+    Return all equipment entries.
+    """
     if not EQUIPMENT_DATA:
         raise HTTPException(status_code=404, detail="No equipment data available.")
     return EQUIPMENT_DATA
@@ -32,7 +36,9 @@ def get_all_equipment():
 
 @router.get("/maintenance", response_model=List[MaintenanceLog])
 def get_all_maintenance():
-    """Return all maintenance log entries."""
+    """
+    Return all maintenance log entries.
+    """
     if not MAINTENANCE_DATA:
         raise HTTPException(status_code=404, detail="No maintenance data available.")
     return MAINTENANCE_DATA
@@ -73,13 +79,72 @@ def search_entities(query: str = Query(..., description="Search term for equipme
     }
 
 
-
-
 @router.get("/info", response_model=dict)
 def get_info():
-    """Return metadata: unique equipment models, locations, and maintenance types."""
+    """
+    Return metadata: unique equipment models, locations, and maintenance types.
+    """
     return {
         "unique_equipment_models": extract_equipment_entities(),
         "unique_locations": extract_locations(),
         "maintenance_types": extract_maintenance_types(),
     }
+
+
+@router.get("/export")
+def export_data(format: str = Query("json", description="Export format: json or csv")):
+    """
+    Export combined equipment and maintenance data.
+    """
+    combined = []
+
+    for eq in EQUIPMENT_DATA:
+        logs = [m for m in MAINTENANCE_DATA if m.equipment_id == eq.equipment_id]
+        if logs:
+            for m in logs:
+                # Build the record
+                record = {
+                    "equipment_id": eq.equipment_id,
+                    "equipment_type": eq.equipment_type,
+                    "location": eq.location,
+                    "manufacturer": eq.manufacturer,
+                    "model": eq.model,
+                    "installation_date": eq.installation_date,
+                    "status": eq.status,
+                    "last_maintenance": eq.last_maintenance,
+                    "log_id": m.log_id,
+                    "maintenance_type": m.maintenance_type,
+                    "maintenance_date": m.maintenance_date,
+                    "technician": m.technician,
+                    "description": m.description,
+                    "maintenance_status": m.status,
+                    "next_scheduled": m.next_scheduled,
+                    "parts_used": m.parts_used,
+                    "cost": m.cost,
+                }
+
+                # Convert any date values to strings inline
+                for key, val in record.items():
+                    if isinstance(val, date):
+                        record[key] = val.isoformat()
+
+                combined.append(record)
+
+    if format == "json":
+        return JSONResponse(content=combined)
+
+    elif format == "csv":
+        import io, csv
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=combined[0].keys())
+        writer.writeheader()
+        writer.writerows(combined)
+        output.seek(0)
+        return StreamingResponse(
+            iter([output.getvalue()]),
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=export.csv"},
+        )
+
+    else:
+        raise HTTPException(status_code=400, detail="Invalid format. Use 'json' or 'csv'.")
