@@ -2,7 +2,6 @@
 Basic tests for data processing and API endpoints.
 """
 
-import pytest
 from fastapi.testclient import TestClient
 from main import app
 from src.data_processor import (
