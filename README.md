@@ -46,7 +46,7 @@ utility-knowledge-api/
 ### 1. Environment Setup
 #### Create virtual environment (recommended)
 ```bash
-python -m venv venv
+python3 -m venv venv
 ```
 
 ### Activate virtual environment
