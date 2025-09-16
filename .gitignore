@@ -22,7 +22,4 @@ Thumbs.db
 *.log
 
 # Specific Project Files to Ignore
-Dockerfile
-ci.yml
-README.md
 SETUP_INSTRUCTIONS.md
