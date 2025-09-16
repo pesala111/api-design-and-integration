@@ -16,20 +16,25 @@ A lightweight FastAPI application that processes equipment and maintenance data,
 
 ```
 utility-knowledge-api/
-├── README.md                 # Your documentation
-├── requirements.txt          # Dependencies
-├── main.py                  # Application entry point (FastAPI skeleton provided)
-├── data/                    # Sample data files (provided)
+├── .github/
+│   └── workflows/
+│       └── ci.yml                  # CI workflow for automated testing
+├── data/                           # Sample data files
 │   ├── equipment_inventory.csv
 │   └── maintenance_logs.json
-├── src/                     # Your source code
+├── src/                            # Source code
 │   ├── __init__.py
-│   ├── data_processor.py    # Data processing logic
-│   ├── api.py              # API endpoints
-│   └── models.py           # Data models (optional)
-└── tests/                   # Your tests
-    ├── __init__.py
-    └── test_*.py           # Test files
+│   ├── api.py                      # API endpoints (list, search, export)
+│   ├── data_processor.py           # Data processing logic
+│   └── models.py                   # Data models (Pydantic schemas)
+├── tests/                          # Unit tests
+│   ├── __init__.py
+│   └── test_app.py                 # Unit tests for API and data processing
+├── .gitignore                      # Git ignore rules
+├── Dockerfile                      # Containerization setup
+├── README.md                       # Project documentation
+├── requirements.txt                # Dependencies
+├── main.py                         # FastAPI app entry point
 ```
 
 ---
@@ -107,3 +112,5 @@ curl "http://localhost:8000/api/export?format=csv" -o export.csv
 - All Bonus features implemented
 
 - Single test file used for simplicity.
+
+- Added **Dockerfile** for containerization and a **CI workflow** for automated testing (verified locally), even though these were not explicitly requested.  
