@@ -10,6 +10,8 @@ from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse, StreamingResponse
 from typing import List
 from datetime import date
+import io
+import csv
 
 from src.data_processor import (
     EQUIPMENT_DATA,
@@ -134,7 +136,6 @@ def export_data(format: str = Query("json", description="Export format: json or 
         return JSONResponse(content=combined)
 
     elif format == "csv":
-        import io, csv
         output = io.StringIO()
         writer = csv.DictWriter(output, fieldnames=combined[0].keys())
         writer.writeheader()
