@@ -1,39 +1,40 @@
-# Utility Knowledge API
+# API Design & Integration - Equipment Maintenance API
 
 A lightweight FastAPI application that processes equipment and maintenance data, extracts key entities, and exposes them via RESTful API endpoints.
 
-## 📋 Features
-- Loads and validates **equipment inventory** (CSV) and **maintenance logs** (JSON).  
-- Extracts and relates key entities:  
+## Features
+- Loads and validates equipment inventory (CSV) and maintenance logs (JSON).  
+- Extracts and relates key entities with Pydantic schemas.  
 - Provides endpoints to search, list, and export data.  
-- Supports **JSON** and **CSV** export.  
+- Supports JSON and CSV export.  
 - Includes unit tests for data processing and API endpoints.  
-- Automatically generates interactive API documentation at `/docs`.
+- Automatically generates interactive API documentation at `/docs`.  
+- Containerized with Docker and includes CI workflow for testing.
 
 ---
 
 ### Project Structure
 
 ```
-utility-knowledge-api/
+api-design-and-integration/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                  # CI workflow for automated testing
 ├── data/                           # Sample data files
 │   ├── equipment_inventory.csv
 │   └── maintenance_logs.json
-├── src/                            # Source code
+├── src/                            
 │   ├── __init__.py
 │   ├── api.py                      # API endpoints (list, search, export)
 │   ├── data_processor.py           # Data processing logic
 │   └── models.py                   # Data models (Pydantic schemas)
-├── tests/                          # Unit tests
+├── tests/                          
 │   ├── __init__.py
 │   └── test_app.py                 # Unit tests for API and data processing
-├── .gitignore                      # Git ignore rules
+├── .gitignore                      
 ├── Dockerfile                      # Containerization setup
-├── README.md                       # Project documentation
-├── requirements.txt                # Dependencies
+├── README.md                       
+├── requirements.txt                
 ├── main.py                         # FastAPI app entry point
 ```
 
@@ -81,7 +82,14 @@ http://localhost:8000/docs
 http://localhost:8000/redoc
  (ReDoc)
 
-### 3. Running Tests
+### 3. Run with Docker
+
+```bash
+docker build -t api-demo .
+docker run -p 8000:8000 api-demo
+```
+
+### 4. Running Tests
 ---
 
 ```bash
@@ -104,13 +112,8 @@ Example:
 curl "http://localhost:8000/api/export?format=csv" -o export.csv
 ```
 
-## 📌 Assumptions & Design Decisions
-- Missing or malformed dates are handled.
-
-- Maintenance and equipment records are linked via equipment_id, which is common key.
-
-- All Bonus features implemented
-
-- Single test file used for simplicity.
-
-- Added **Dockerfile** for containerization and a **CI workflow** for automated testing (verified locally), even though these were not explicitly requested.  
+## Possible Use Cases
+- Backend service for managing equipment inventories and maintenance logs.  
+- API integration layer for IoT or monitoring systems that generate maintenance events.  
+- Demo project to showcase clean API design, data validation, and integration patterns.  
+- Educational example for building scalable FastAPI services with testing, CI/CD, and Docker.  
