@@ -14,7 +14,7 @@ from src.data_processor import (
 
 client = TestClient(app)
 
-# ----------------- Data Processor Tests -----------------
+# Data Processor Tests
 
 class TestDataProcessor:
     def test_load_csv_data(self):
@@ -22,7 +22,7 @@ class TestDataProcessor:
         assert len(EQUIPMENT_DATA) > 0
         assert hasattr(EQUIPMENT_DATA[0], "equipment_id")
 
-    def test_load_json_data(self):
+    def test_load_json_data(self):''
         """Ensure maintenance data is loaded correctly."""
         assert len(MAINTENANCE_DATA) > 0
         assert hasattr(MAINTENANCE_DATA[0], "maintenance_type")
@@ -43,7 +43,7 @@ class TestDataProcessor:
         assert any(mt for mt in maintenance_types)
 
 
-# ----------------- API Tests -----------------
+# API Tests
 
 class TestAPI:
     def test_get_equipment_endpoint(self):
