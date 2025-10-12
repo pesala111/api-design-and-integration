@@ -1,5 +1,4 @@
----
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -8,22 +7,22 @@ on:
     branches: ["main"]
 
 jobs:
-  build-test-lint:
+  lint-and-test:
+    name: Lint & Test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      # Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Cache Python dependencies
-      - name: Cache pip
+      # Cache pip dependencies for faster builds
+      - name: Cache pip dependencies
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
@@ -31,17 +30,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      # Install dependencies + Ruff
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install ruff
+          pip install ruff pytest pytest-cov
 
-      # Run Ruff linter
-      - name: Lint with Ruff
+      - name: Lint code with Ruff
         run: ruff check .
 
-      # Run tests with pytest
-      - name: Run tests
-        run: pytest -v
+      - name: Run unit tests
+        run: |
+          pytest -v --cov=src --cov-report=term-missing
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: .coverage
