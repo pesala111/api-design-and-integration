@@ -11,7 +11,7 @@ from typing import Optional
 from datetime import date
 
 class Equipment(BaseModel):
-        """Data model for a piece of equipment."""
+    """Data model for a piece of equipment."""
     equipment_id: str
     equipment_type: str
     location: str
