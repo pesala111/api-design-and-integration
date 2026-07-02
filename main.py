@@ -55,7 +55,7 @@ app.include_router(router)
 
 # Application Entry Point
 if __name__ == "__main__":
-        import uvicorn
+    import uvicorn
 
     host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", 8000))
@@ -63,9 +63,9 @@ if __name__ == "__main__":
 
     logger.info(f"Starting server on {host}:{port}")
     uvicorn.run(
-                "main:app",
-                host=host,
-                port=port,
-                reload=reload,
-                log_level="info",
+        "main:app",
+        host=host,
+        port=port,
+        reload=reload,
+        log_level="info",
     )
